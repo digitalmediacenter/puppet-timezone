@@ -59,6 +59,14 @@ class timezone (
       }
       $localtime_ensure = 'link'
       $timezone_ensure = 'file'
+      if $::osfamily == 'Suse' {
+        file_line { 'suse_clock':
+          path  => '/etc/sysconfig/clock',
+          match => '^TIMEZONE=\".*\"',
+          line  => "TIMEZONE=\"${timezone}\"",
+        }
+      }
+
     }
     /(absent)/: {
       # Leave package installed, as it is a system dependency
